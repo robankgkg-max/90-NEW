@@ -1,0 +1,36 @@
+Create an editorial, luxury wedding photography "Our Philosophy" section in React + Tailwind CSS with Lucide icons that matches this exact specification:
+
+1. TYPOGRAPHY & FONTS:
+   - Headings use the high-fashion editorial "Vogue" font (class `font-vogue`, fallback to Didot/Bodoni Moda).
+   - Taglines and poetic accents use italic serif "Bodoni Moda" (class `font-editorial italic`).
+   - Body copy uses clean, light grotesque sans-serif "Inter" (class `font-sans font-light`).
+
+2. EXACT WORDS & CONTENT STRUCTURE:
+   - Top Header:
+     • Tag/Title: "OUR PHILOSOPHY" (Vogue font, uppercase, tracking-[0.22em], text-2xl sm:text-3xl md:text-4xl lg:text-[42px])
+     • Subtitle: "don't skip what's coming if you want the best from 90s Frame" (Bodoni Moda italic, text-base sm:text-lg md:text-xl, color #080808/75)
+   - 16:9 Cinema Video Player:
+     • Video frame: 16:9 aspect-video with rounded subtle corners, shadow-[0_12px_44px_rgba(0,0,0,0.12)], and subtle dark border.
+     • Poster: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85"
+     • Video URL: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+     • Center circular translucent backdrop-blur Play/Pause button (w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24, bg-black/40 backdrop-blur-md border border-white/30).
+     • Custom bottom control bar on dark gradient: time scrubber slider, mini play/pause button, timecode (e.g. "0:00 / 0:15"), audio mute toggle (Volume2/VolumeX), replay button (RotateCcw), and fullscreen toggle (Maximize). Auto-hides on inactivity while playing.
+   - Main Headline Under Video:
+     • "THE DAY MOVES FASTER THAN YOU THINK" (Vogue font, uppercase, text-3xl sm:text-4xl md:text-5xl lg:text-[56px] xl:text-[64px], tracking-[-0.01em], leading-[1.08])
+   - Poetic Editorial Cadence Copy:
+     • Stanza 1 (Bodoni Moda italic): "You will not remember it the way you think you will."
+     • Stanza 2 (Inter light, leading-[1.8]): "The morning. The chaos. The quiet before the ceremony. Your mother’s face when she saw you. Your father, composing himself in a corridor where he thought no one was watching."
+     • Stanza 3 (Bodoni Moda italic): "These moments do not wait."
+     • Stanza 4 (Inter light): "They happen in the margins — while everyone is looking somewhere else — and then they are gone. Not just from the day. From everything."
+     • Stanza 5 (Inter normal + uppercase sub-line): 
+       "This is the only part of your wedding that cannot be redone."
+       "NOT THE FLOWERS. NOT THE VENUE. NOT THE FOOD."
+     • Stanza 6 (Bodoni Moda large serif): "The moments."
+     • Stanza 7 (Inter light): "90s Frame exists for exactly this. We have been in that corridor. We know what happens there. And we will not miss it."
+     • Stanza 8 (Bodoni Moda italic): "Your day is safe with us."
+     • Optional Button: "CHECK AVAILABILITY & COMMISSIONS" (uppercase tracking-[0.26em], bordered).
+
+3. PALETTE:
+   - Background: Pure White `#FFFFFF`
+   - Primary Ink: Deep Editorial Charcoal/Black `#080808`
+   - Hairline borders: `#080808/10`
