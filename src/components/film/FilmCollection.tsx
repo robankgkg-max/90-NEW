@@ -119,6 +119,8 @@ function Television({
                   // ignore
                 }
                 setIsVideoPlaying(true);
+                setShowControls(true);
+                startHideTimer(3000);
                 const dur = event.target.getDuration();
                 if (dur && dur > 0) setDuration(dur);
               },
@@ -127,13 +129,19 @@ function Television({
                 // YT.PlayerState: 1 = PLAYING, 2 = PAUSED, 0 = ENDED
                 if (event.data === 1) {
                   setIsVideoPlaying(true);
+                  setShowControls(true);
+                  startHideTimer(3000);
                   const dur = event.target.getDuration();
                   if (dur && dur > 0) setDuration(dur);
                 } else if (event.data === 2) {
                   setIsVideoPlaying(false);
+                  setShowControls(true);
+                  if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
                 } else if (event.data === 0) {
                   setIsVideoPlaying(false);
+                  setShowControls(true);
                   setCurrentTime(0);
+                  if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
                 }
               },
             },
@@ -151,6 +159,7 @@ function Television({
     return () => {
       isMounted = false;
       if (pollTimer) clearTimeout(pollTimer);
+      if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
       if (playerRef.current && typeof playerRef.current.destroy === "function") {
         try {
           playerRef.current.destroy();
@@ -178,17 +187,55 @@ function Television({
     return () => clearInterval(interval);
   }, [isPlaying]);
 
+  // Helper to start hide timer for controls (3 seconds fade after user stops touching/interacting)
+  const startHideTimer = (delayMs: number = 3000) => {
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = setTimeout(() => {
+      setShowControls(false);
+    }, delayMs);
+  };
+
+  // Touch handlers: keep controls open while touching, fade 3 seconds after leaving touch
+  const handleTouchStart = () => {
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+  };
+
+  const handleTouchEnd = () => {
+    if (isVideoPlaying) {
+      startHideTimer(3000);
+    }
+  };
+
+  // Mouse handlers for desktop
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (isVideoPlaying) {
+      startHideTimer(3000);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isVideoPlaying) {
+      startHideTimer(3000);
+    }
+  };
+
   // Handle play / pause toggle
-  const handleTogglePlayback = (e?: React.MouseEvent) => {
+  const handleTogglePlayback = (e?: React.MouseEvent | React.TouchEvent) => {
     if (e) e.stopPropagation();
     if (!playerRef.current) return;
     try {
       if (isVideoPlaying) {
         playerRef.current.pauseVideo();
         setIsVideoPlaying(false);
+        setShowControls(true);
+        if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
       } else {
         playerRef.current.playVideo();
         setIsVideoPlaying(true);
+        setShowControls(true);
+        startHideTimer(3000);
       }
     } catch {
       // fallback
@@ -199,6 +246,7 @@ function Television({
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value);
     setCurrentTime(newTime);
+    setShowControls(true);
     if (playerRef.current && typeof playerRef.current.seekTo === "function") {
       try {
         playerRef.current.seekTo(newTime, true);
@@ -206,11 +254,14 @@ function Television({
         // ignore
       }
     }
+    startHideTimer(3000);
   };
 
   // Handle audio mute / unmute
   const handleToggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setShowControls(true);
+    if (isVideoPlaying) startHideTimer(3000);
     if (!playerRef.current) return;
     try {
       if (isMuted) {
@@ -228,11 +279,13 @@ function Television({
   // Replay from start
   const handleRestart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setShowControls(true);
     if (!playerRef.current) return;
     try {
       playerRef.current.seekTo(0, true);
       playerRef.current.playVideo();
       setIsVideoPlaying(true);
+      startHideTimer(3000);
     } catch {
       // ignore
     }
@@ -244,17 +297,6 @@ function Television({
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-
-  // Auto-hide controls during active playback after inactivity, keep visible on hover
-  const handleMouseMove = () => {
-    setShowControls(true);
-    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
-    if (isVideoPlaying) {
-      hideControlsTimer.current = setTimeout(() => {
-        setShowControls(false);
-      }, 3500);
-    }
   };
 
   return (
@@ -279,11 +321,16 @@ function Television({
           className="hidden lg:block absolute inset-0 w-full h-full object-contain pointer-events-none z-10"
         />
 
-        {/* Vintage Screen Cutout Area with responsive positioning */}
+        {/* Vintage Screen Cutout Area with responsive positioning and touch support */}
         <div
           className="crt-screen-cutout absolute z-20 overflow-hidden bg-[#0A0A0A]"
           onMouseMove={handleMouseMove}
-          onMouseEnter={() => setShowControls(true)}
+          onMouseEnter={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
         >
           {isPlaying ? (
             <div className="relative w-full h-full group/player">
@@ -296,16 +343,23 @@ function Television({
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
 
-              {/* Clickable Overlay to easily toggle play/pause anywhere on the screen */}
+              {/* Clickable Overlay to reveal controls or toggle play/pause */}
               <div
                 className="absolute inset-0 z-20 cursor-pointer"
-                onClick={handleTogglePlayback}
+                onClick={(e) => {
+                  if (!showControls && isVideoPlaying) {
+                    setShowControls(true);
+                    startHideTimer(3000);
+                  } else {
+                    handleTogglePlayback(e);
+                  }
+                }}
               />
 
               {/* CRT Curved Glass Inner Bezel Shadow & Vintage Scanline Glow */}
               <div className="absolute inset-0 pointer-events-none z-20 rounded-[inherit] shadow-[inset_0_0_22px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.14)]" />
 
-              {/* Big Center Glassmorphic Play/Pause Button on Pause or Hover */}
+              {/* Big Center Glassmorphic Play/Pause Button on Pause */}
               {!isVideoPlaying && (
                 <div
                   className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
@@ -321,14 +375,21 @@ function Television({
                 </div>
               )}
 
-              {/* Custom Glassmorphism Video Control Bar on Bottom */}
+              {/* Custom Glassmorphism Video Control Bar on Bottom with 3-second auto-fade after touch */}
               <div
-                className={`absolute bottom-2 sm:bottom-3 inset-x-2 sm:inset-x-3.5 z-30 transition-all duration-300 pointer-events-auto ${
+                className={`absolute bottom-2 sm:bottom-3 inset-x-2 sm:inset-x-3.5 z-30 transition-all duration-500 ease-out pointer-events-auto ${
                   showControls || !isVideoPlaying
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-2 pointer-events-none"
                 }`}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isVideoPlaying) startHideTimer(3000);
+                }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
               >
                 <div className="bg-black/45 backdrop-blur-md border border-white/25 hover:border-white/40 rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
                   {/* Glassmorphic Play/Pause Button */}

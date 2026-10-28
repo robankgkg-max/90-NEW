@@ -360,7 +360,7 @@ export function Philosophy() {
               href="#contact"
               className="inline-block uppercase tracking-[0.26em] text-xs sm:text-sm py-4 px-8 sm:px-10 border border-[#080808] hover:bg-[#080808] hover:text-[#FFFFFF] transition-all duration-300 font-sans font-medium text-[#080808]"
             >
-              CHECK AVAILABILITY &amp; COMMISSIONS
+              CHECK AVAILABILITY
             </a>
           </div>
         </div>
