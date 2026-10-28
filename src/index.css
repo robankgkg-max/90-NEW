@@ -57,7 +57,7 @@
   font-family: var(--font-display);
 }
 
-.cover-line {
+@utility cover-line {
   font-family: var(--font-sans);
   font-size: 10px;
   letter-spacing: 0.28em;

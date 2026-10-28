@@ -61,7 +61,7 @@ export function Hero() {
           <span className="cover-line opacity-90 hidden md:block">
             Volume XII &nbsp;·&nbsp; MMXXVI
           </span>
-          <span className="cover-line opacity-90 text-[9px] md:text-[10px] tracking-[0.24em] md:tracking-[0.28em] text-center md:text-right">
+          <span className="cover-line opacity-90 text-[8.2px] md:text-[10px] tracking-[0.24em] md:tracking-[0.28em] text-center md:text-right">
             Est. 2020 &nbsp;·&nbsp; Six Years of Trust
           </span>
         </div>
@@ -95,7 +95,7 @@ export function Hero() {
           <div className="grid grid-cols-2 gap-6 md:gap-8 items-start -translate-y-[8vh]">
             <div>
               <p className="cover-line opacity-80 mb-2">N° 01</p>
-              <p className="font-display italic text-xl md:text-3xl leading-tight">
+              <p className="font-display italic text-[19px] md:text-3xl leading-tight">
                 Subtle Luxury,
                 <br />
                 <span className="not-italic uppercase tracking-[0.04em]">Quiet Vows</span>
@@ -103,7 +103,7 @@ export function Hero() {
             </div>
             <div className="text-right -mt-[calc(2.5rem+3vh)] md:-mt-[calc(2rem+3vh)]">
               <p className="cover-line opacity-80 mb-2">N° 02</p>
-              <p className="font-display italic text-xl md:text-3xl leading-tight">
+              <p className="font-display italic text-[19px] md:text-3xl leading-tight">
                 Rare Frames,
                 <br />
                 <span className="not-italic uppercase tracking-[0.04em]">Fine Moments</span>

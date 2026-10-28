@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 const VIDEO_POSTER =
-  "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85";
+  "https://res.cloudinary.com/cbi5mcab/image/upload/v1791530489/SaveClip.App_682117137_18100818932051532_82501271114918916_n_apyckk.jpg";
 const VIDEO_URL =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
@@ -158,7 +158,19 @@ export function Philosophy() {
             }}
             onClick={togglePlay}
             className="w-full h-full object-cover cursor-pointer"
+            style={{ objectPosition: "center 22%" }}
           />
+
+          {/* Cover Frame Poster positioned so couple's face and key details remain clearly visible */}
+          {!hasStarted && (
+            <img
+              src={VIDEO_POSTER}
+              alt="Our Philosophy Cover"
+              onClick={togglePlay}
+              className="absolute inset-0 w-full h-full object-cover cursor-pointer z-10"
+              style={{ objectPosition: "center 22%" }}
+            />
+          )}
 
           {/* Large Center Translucent Backdrop-Blur Play/Pause Button */}
           {(!isPlaying || showControls) && (
@@ -180,7 +192,7 @@ export function Philosophy() {
 
           {/* Poster prompt indicator when not started */}
           {!hasStarted && (
-            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs tracking-[0.2em] uppercase font-sans pointer-events-none">
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs tracking-[0.2em] uppercase font-sans pointer-events-none z-20">
               Cinema Reel &nbsp;·&nbsp; 16:9
             </div>
           )}

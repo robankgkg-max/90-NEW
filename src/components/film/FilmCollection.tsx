@@ -524,15 +524,11 @@ export function FilmCollection() {
     >
       <div className="max-w-[1360px] mx-auto">
         {/* Top Sub-Header Bar */}
-        <div className="flex items-center justify-between pb-8 sm:pb-12 border-b border-[#080808]/15">
-          <span className="font-sans text-[10px] sm:text-[11px] tracking-[0.28em] font-normal uppercase text-[#080808]">
-            90S FILM
-          </span>
-          <div className="flex items-center gap-4 sm:gap-8 font-sans text-[10px] sm:text-[11px] tracking-[0.26em] uppercase text-[#080808]/85">
-            <span className="hover:text-[#080808] cursor-pointer transition-colors">PEOPLE</span>
-            <span className="hover:text-[#080808] cursor-pointer transition-colors">PLACES</span>
-            <span className="hover:text-[#080808] cursor-pointer transition-colors">FILMS</span>
-            <span className="opacity-40 select-none">——</span>
+        <div className="w-full flex items-center pb-8 sm:pb-12 border-b border-[#080808]/15">
+          <div className="w-full overflow-hidden flex items-center justify-center select-none">
+            <span className="w-full font-sans text-[10px] sm:text-[11px] tracking-[0.26em] text-[#080808]/40 whitespace-nowrap overflow-hidden text-center">
+              {"—".repeat(220)}
+            </span>
           </div>
         </div>
 
